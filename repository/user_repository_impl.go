@@ -36,10 +36,10 @@ func (repo *UserRepositoryImpl) Save(ctx context.Context, user model.User) error
 	return nil
 }
 
-func (repo *UserRepositoryImpl) Update(ctx context.Context, userId uuid.UUID, user model.User) (model.User, error) {
+func (repo *UserRepositoryImpl) Update(ctx context.Context, userId uuid.UUID, user model.User) error {
 	tx, err := repo.Db.Begin()
 	if err != nil {
-		return model.User{}, fmt.Errorf("failed to start transaction: %v", err)
+		return fmt.Errorf("failed to start transaction: %v", err)
 	}
 
 	defer helper.CommitOrRollback(tx)
@@ -47,15 +47,10 @@ func (repo *UserRepositoryImpl) Update(ctx context.Context, userId uuid.UUID, us
 	SQL := "UPDATE users SET name = ?, surname = ?, email = ?, phone_number = ? WHERE id = ?"
 	_, err = tx.Exec(SQL, user.Name, user.Surname, user.Email, user.PhoneNumber, userId)
 	if err != nil {
-		return model.User{}, fmt.Errorf("failed to execute update query: %v", err)
+		return fmt.Errorf("failed to execute update query: %v", err)
 	}
 
-	updatedUser, err := repo.FindById(ctx, userId)
-	if err != nil {
-		return model.User{}, fmt.Errorf("failed to find updated user: %v", err)
-	}
-
-	return updatedUser, nil
+	return nil
 }
 
 func (repo *UserRepositoryImpl) Delete(ctx context.Context, userId uuid.UUID) error {
@@ -128,6 +123,34 @@ func (repo *UserRepositoryImpl) FindByEmail(ctx context.Context, email string) (
 		return user, nil
 	} else {
 		return model.User{}, fmt.Errorf("user with email %s not found", email)
+	}
+}
+
+func (repo *UserRepositoryImpl) FindByPhoneNumber(ctx context.Context, phoneNumber string) (model.User, error) {
+	tx, err := repo.Db.Begin()
+	if err != nil {
+		return model.User{}, fmt.Errorf("failed to begin transaction: %w", err)
+	}
+
+	defer helper.CommitOrRollback(tx)
+
+	SQL := "SELECT id, name, surname, email, phone_number, created_at FROM users WHERE phone_number = ?"
+	result, err := tx.QueryContext(ctx, SQL, phoneNumber)
+	if err != nil {
+		return model.User{}, fmt.Errorf("failed to execute query to find user by phone number: %w", err)
+	}
+	defer result.Close()
+
+	user := model.User{}
+
+	if result.Next() {
+		err := result.Scan(&user.Id, &user.Name, &user.Surname, &user.Email, &user.PhoneNumber, &user.CreatedAt)
+		if err != nil {
+			return model.User{}, fmt.Errorf("failed to scan user data: %w", err)
+		}
+		return user, nil
+	} else {
+		return model.User{}, fmt.Errorf("user with phone number %s not found", phoneNumber)
 	}
 }
 
