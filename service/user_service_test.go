@@ -142,6 +142,8 @@ func TestUpdateUser(t *testing.T) {
 
 	user := model.User{Id: userId, Name: "John", Surname: "Doe", Email: "john.doe@example.com", PhoneNumber: "1234567890"}
 	mockRepo.On("FindById", mock.Anything, userId).Return(user, nil)
+	mockRepo.On("FindByEmail", mock.Anything, userRequest.Email).Return(model.User{}, nil)
+	mockRepo.On("FindByPhoneNumber", mock.Anything, userRequest.PhoneNumber).Return(model.User{}, nil)
 	mockRepo.On("Update", mock.Anything, userId, mock.Anything).Return(nil)
 
 
@@ -151,5 +153,6 @@ func TestUpdateUser(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, userRequest.Name, result.Name)
 	assert.Equal(t, userRequest.Email, result.Email)
+	assert.Equal(t, userRequest.PhoneNumber, result.PhoneNumber)
 	mockRepo.AssertExpectations(t)
 }

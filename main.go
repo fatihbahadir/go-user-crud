@@ -10,9 +10,6 @@ import (
 func main() {
 	fmt.Printf("Server started")
 
-	db := config.DatabaseConnection()
-	fmt.Printf("Database connected", db)
-
 	server := http.Server{
 		Addr: "localhost:8888",
 		Handler: nil,

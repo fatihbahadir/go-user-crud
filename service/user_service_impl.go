@@ -132,6 +132,25 @@ func (service *UserServiceImpl) Update(ctx context.Context, request request.User
 		return response.UserResponse{}, helper.NewErrorResponse(400, "No fields to update", nil) 
 	}
 
+	existingUser, err := service.UserRepository.FindByEmail(ctx, request.Email)
+
+	if err != nil {
+		return response.UserResponse{}, err
+	}
+
+	if existingUser.Email != "" {
+		return response.UserResponse{}, helper.NewErrorResponse(400, "User with email already exists", nil)
+	}
+
+	existingUserByPhoneNumber, err := service.UserRepository.FindByPhoneNumber(ctx, request.PhoneNumber)
+	if err != nil {
+		return response.UserResponse{}, err
+	}
+
+	if existingUserByPhoneNumber.PhoneNumber != "" {
+		return response.UserResponse{}, helper.NewErrorResponse(400, "User with this phone nubmer already exists", nil)
+	}
+
 	if request.Name != "" {
 		user.Name = request.Name
 	}
