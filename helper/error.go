@@ -1,7 +1,9 @@
 package helper
 
-func PanicIfError(err error) {
+import "log"
+
+func HandleError(err error, message string) {
 	if err != nil {
-		panic(err)
+		log.Fatalf("%s: %v", message, err)
 	}
 }
