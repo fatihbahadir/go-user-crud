@@ -1,0 +1,39 @@
+# Go binary files
+*.exe
+*.exe~
+*.out
+*.test
+*.so
+*.dylib
+*.a
+*.dll
+*.dSYM
+
+# Go mod files (keep these)
+go.mod
+go.sum
+
+# Go workspace (keep if needed)
+go.work
+go.work.sum
+
+# IDE/editor folders
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Coverage files
+*.coverprofile
+
+# Build directories
+bin/
+build/
+
+# Vendor directory (only if you are not using vendoring)
+vendor/
