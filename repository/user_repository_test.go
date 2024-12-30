@@ -200,3 +200,43 @@ func TestFindByEmail(t *testing.T) {
 }
 
 
+func TestFindByPhoneNumber(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("Failed to open mock database connection: %v", err)
+	}
+	defer db.Close()
+
+	repo := repository.NewUserRepository(db)
+
+	phoneNumber := "1234567890"
+	user := model.User{
+		Id:          uuid.New(),
+		Name:        "John",
+		Surname:     "Doe",
+		Email:       "john.doe@example.com",
+		PhoneNumber: phoneNumber,
+		CreatedAt:   time.Now(),
+	}
+
+	mock.ExpectBegin()
+
+	mock.ExpectQuery("SELECT id, name, surname, email, phone_number, created_at FROM users WHERE phone_number = ?").
+		WithArgs(phoneNumber).
+		WillReturnRows(
+			sqlmock.NewRows([]string{"id", "name", "surname", "email", "phone_number", "created_at"}).
+				AddRow(user.Id, user.Name, user.Surname, user.Email, user.PhoneNumber, user.CreatedAt),
+		)
+
+	mock.ExpectCommit()
+
+	result, err := repo.FindByPhoneNumber(context.Background(), phoneNumber)
+
+	assert.NoError(t, err, "Expected no error during FindByPhoneNumber operation")
+	assert.Equal(t, user.PhoneNumber, result.PhoneNumber, "Returned user phone number should match")
+	assert.Equal(t, user.Id, result.Id, "Returned user ID should match")
+
+	if err := mock.ExpectationsWereMet(); err != nil {
+		t.Errorf("Mock expectations were not met: %v", err)
+	}
+}
