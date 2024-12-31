@@ -98,7 +98,7 @@ func (controller *UserController) Delete(writer http.ResponseWriter, requests *h
 		return
 	}
 
-	helper.WriteSuccessResponse(w, http.StatusOK, "User deleted successfully", nil)
+	helper.WriteSuccessResponse(writer, http.StatusOK, "User deleted successfully", nil)
 }
 
 func (controller *UserController) FindAll(writer http.ResponseWriter, requests *http.Request) {
@@ -125,7 +125,7 @@ func (controller *UserController) FindById(writer http.ResponseWriter, requests 
 		return
 	}
 
-	userResponse, err := controller.UserService.FindById(r.Context(), id)
+	userResponse, err := controller.UserService.FindById(requests.Context(), id)
 	if err != nil {
 		if errorResponse, ok := err.(*helper.ErrorResponse); ok {
 			helper.WriteJSONResponse(writer, errorResponse.Code, errorResponse)
