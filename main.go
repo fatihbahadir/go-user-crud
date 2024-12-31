@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"user-crud/config"
 	"user-crud/helper"
 )
 

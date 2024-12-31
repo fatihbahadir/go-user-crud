@@ -16,10 +16,9 @@ type UserServiceImpl struct {
 	UserRepository repository.UserRepository
 }
 
-func NewUserService(userRepository repository.UserRepository) UserService {
+func NewUserServiceImpl(userRepository repository.UserRepository) UserService {
 	return &UserServiceImpl{UserRepository: userRepository}
 }
-
 func (service *UserServiceImpl) Create(ctx context.Context, request request.UserCreateRequest) error {
 	err := helper.ValidateStruct(request)
 	if err != nil {

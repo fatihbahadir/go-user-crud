@@ -51,7 +51,7 @@ func (m *MockUserRepository) Update(ctx context.Context, userId uuid.UUID, user 
 
 func TestCreateUser(t *testing.T) {
 	mockRepo := new(MockUserRepository)
-	service := NewUserService(mockRepo)
+	service := NewUserServiceImpl(mockRepo)
 
 	userRequest := request.UserCreateRequest{
 		Name:        "John",
@@ -72,7 +72,7 @@ func TestCreateUser(t *testing.T) {
 
 func TestDeleteUser(t *testing.T) {
 	mockRepo := new(MockUserRepository)
-	service := NewUserService(mockRepo)
+	service := NewUserServiceImpl(mockRepo)
 
 	userId := uuid.New()
 	user := model.User{Id: userId}
@@ -88,7 +88,7 @@ func TestDeleteUser(t *testing.T) {
 
 func TestFindAllUsers(t *testing.T) {
 	mockRepo := new(MockUserRepository)
-	service := NewUserService(mockRepo)
+	service := NewUserServiceImpl(mockRepo)
 
 	users := []model.User{
 		{Id: uuid.New(), Name: "John", Surname: "Doe", Email: "john.doe@example.com", PhoneNumber: "1234567890"},
@@ -109,7 +109,7 @@ func TestFindAllUsers(t *testing.T) {
 
 func TestFindByIdUser(t *testing.T) {
 	mockRepo := new(MockUserRepository)
-	service := NewUserService(mockRepo)
+	service := NewUserServiceImpl(mockRepo)
 
 	userId := uuid.New()
 	user := model.User{Id: userId, Name: "John", Surname: "Doe", Email: "john.doe@example.com", PhoneNumber: "1234567890"}
@@ -128,7 +128,7 @@ func TestFindByIdUser(t *testing.T) {
 
 func TestUpdateUser(t *testing.T) {
 	mockRepo := new(MockUserRepository)
-	service := NewUserService(mockRepo)
+	service := NewUserServiceImpl(mockRepo)
 
 	userId := uuid.New()
 	userRequest := request.UserUpdateRequest{
