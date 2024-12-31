@@ -17,6 +17,17 @@ func ReadRequestBody(r *http.Request, result interface{}) error {
 }
 
 
+func WriteSuceResponse(writer http.ResponseWriter, code int, status string, data interface{}) {
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(code)
+
+	json.NewEncoder(writer).Encode(WebResponse{
+		Code:   code,
+		Status: status,
+		Data:   data,
+	})
+}
+
 func WriteJSONResponse(w http.ResponseWriter, statusCode int, payload interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)

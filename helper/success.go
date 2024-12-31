@@ -1,7 +1,5 @@
 package helper
 
-import "net/http"
-
 type SuccessResponse struct {
 	Code    int         `json:"code"`
 	Message string      `json:"message"`
@@ -14,9 +12,4 @@ func NewSuccessResponse(code int, message string, data interface{}) *SuccessResp
 		Message: message,
 		Data:    data,
 	}
-}
-
-func WriteSuccessResponse(w http.ResponseWriter, code int, message string, data interface{}) {
-	response := NewSuccessResponse(code, message, data)
-	WriteJSONResponse(w, code, response)
 }

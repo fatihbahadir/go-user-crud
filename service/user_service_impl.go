@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"time"
 	"user-crud/data/request"
 	"user-crud/data/response"
 	"user-crud/helper"
@@ -28,19 +29,23 @@ func (service *UserServiceImpl) Create(ctx context.Context, request request.User
 	existingUser, err := service.UserRepository.FindByEmail(ctx, request.Email)
 
 	if err != nil {
+		fmt.Print("Error here we couldnt find by email")
 		return err
 	}
 
 	if existingUser.Email != "" {
+		fmt.Print("User with email already existsl")
 		return helper.NewErrorResponse(400, "User with email already exists", nil)
 	}
 
 	existingUserByPhoneNumber, err := service.UserRepository.FindByPhoneNumber(ctx, request.PhoneNumber)
 	if err != nil {
+		fmt.Print("Error here we couldnt find by phone num")
 		return err
 	}
 
 	if existingUserByPhoneNumber.PhoneNumber != "" {
+		fmt.Print("User with phone already existsl")
 		return helper.NewErrorResponse(400, "User with this phone nubmer already exists", nil)
 	}
 
@@ -49,6 +54,7 @@ func (service *UserServiceImpl) Create(ctx context.Context, request request.User
 		Surname:     request.Surname,
 		Email:       request.Email,
 		PhoneNumber: request.PhoneNumber,
+		CreatedAt:  time.Now(),
 	}
 
 	if err := service.UserRepository.Save(ctx, user); err != nil {

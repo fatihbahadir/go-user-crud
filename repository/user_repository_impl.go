@@ -103,7 +103,6 @@ func (repo *UserRepositoryImpl) FindByEmail(ctx context.Context, email string) (
 	if err != nil {
 		return model.User{}, fmt.Errorf("failed to begin transaction: %w", err)
 	}
-
 	defer helper.CommitOrRollback(tx)
 
 	SQL := "SELECT id, name, surname, email, phone_number, created_at FROM users WHERE email = ?"
@@ -114,16 +113,15 @@ func (repo *UserRepositoryImpl) FindByEmail(ctx context.Context, email string) (
 	defer result.Close()
 
 	user := model.User{}
-
 	if result.Next() {
 		err := result.Scan(&user.Id, &user.Name, &user.Surname, &user.Email, &user.PhoneNumber, &user.CreatedAt)
 		if err != nil {
 			return model.User{}, fmt.Errorf("failed to scan user data: %w", err)
 		}
 		return user, nil
-	} else {
-		return model.User{}, fmt.Errorf("user with email %s not found", email)
 	}
+
+	return model.User{}, nil
 }
 
 func (repo *UserRepositoryImpl) FindByPhoneNumber(ctx context.Context, phoneNumber string) (model.User, error) {
@@ -131,7 +129,6 @@ func (repo *UserRepositoryImpl) FindByPhoneNumber(ctx context.Context, phoneNumb
 	if err != nil {
 		return model.User{}, fmt.Errorf("failed to begin transaction: %w", err)
 	}
-
 	defer helper.CommitOrRollback(tx)
 
 	SQL := "SELECT id, name, surname, email, phone_number, created_at FROM users WHERE phone_number = ?"
@@ -142,16 +139,15 @@ func (repo *UserRepositoryImpl) FindByPhoneNumber(ctx context.Context, phoneNumb
 	defer result.Close()
 
 	user := model.User{}
-
 	if result.Next() {
 		err := result.Scan(&user.Id, &user.Name, &user.Surname, &user.Email, &user.PhoneNumber, &user.CreatedAt)
 		if err != nil {
 			return model.User{}, fmt.Errorf("failed to scan user data: %w", err)
 		}
 		return user, nil
-	} else {
-		return model.User{}, fmt.Errorf("user with phone number %s not found", phoneNumber)
 	}
+
+	return model.User{}, nil
 }
 
 func (repo *UserRepositoryImpl) FindAll(ctx context.Context) ([]model.User, error) {

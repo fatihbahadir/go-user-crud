@@ -39,7 +39,8 @@ func (controller *UserController) Create(writer http.ResponseWriter, requests *h
 		return
 	}
 
-	helper.WriteSuccessResponse(writer, http.StatusCreated, "User created successfully", nil)
+	successResponse := helper.NewSuccessResponse(http.StatusCreated, "User created successfully", nil)
+	helper.WriteJSONResponse(writer, http.StatusCreated, successResponse)
 }
 
 func (controller *UserController) Update(writer http.ResponseWriter, requests *http.Request) {
@@ -75,7 +76,8 @@ func (controller *UserController) Update(writer http.ResponseWriter, requests *h
 		return
 	}
 
-	helper.WriteSuccessResponse(writer, http.StatusOK, "User updated successfully", updatedUser)
+	successResponse := helper.NewSuccessResponse(http.StatusOK, "User updated successfully", updatedUser)
+	helper.WriteJSONResponse(writer, http.StatusOK, successResponse)
 }
 
 func (controller *UserController) Delete(writer http.ResponseWriter, requests *http.Request) {
@@ -98,7 +100,9 @@ func (controller *UserController) Delete(writer http.ResponseWriter, requests *h
 		return
 	}
 
-	helper.WriteSuccessResponse(writer, http.StatusOK, "User deleted successfully", nil)
+	successResponse := helper.NewSuccessResponse(http.StatusOK, "User deleted successfully", nil)
+	helper.WriteJSONResponse(writer, http.StatusOK, successResponse)
+
 }
 
 func (controller *UserController) FindAll(writer http.ResponseWriter, requests *http.Request) {
@@ -111,8 +115,8 @@ func (controller *UserController) FindAll(writer http.ResponseWriter, requests *
 		helper.WriteJSONResponse(writer, http.StatusInternalServerError, helper.NewErrorResponse(500, "Internal server error", nil))
 		return
 	}
-	helper.WriteJSONResponse(writer, http.StatusOK, users)
-
+	successResponse := helper.NewSuccessResponse(http.StatusOK, "Users fetched successfully", users)
+	helper.WriteJSONResponse(writer, http.StatusOK, successResponse)
 }
 
 func (controller *UserController) FindById(writer http.ResponseWriter, requests *http.Request) {
@@ -136,5 +140,6 @@ func (controller *UserController) FindById(writer http.ResponseWriter, requests 
 		return
 	}
 
-	helper.WriteJSONResponse(writer, http.StatusOK, userResponse)
+	successResponse := helper.NewSuccessResponse(http.StatusOK, "User found successfully", userResponse)
+	helper.WriteJSONResponse(writer, http.StatusOK, successResponse)
 }
