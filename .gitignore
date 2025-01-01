@@ -9,9 +9,6 @@
 *.dll
 *.dSYM
 
-# Go mod files (keep these)
-go.mod
-go.sum
 
 # Go workspace (keep if needed)
 go.work
