@@ -58,7 +58,7 @@ This will start the server on `http://localhost:8888`.
 
 ### 1. Create User
 
-- **POST** `/users`
+- **POST** `/user`
   
 Create a new user with the required fields: `name`, `surname`, `email`, `phone_number`.
 
@@ -77,13 +77,14 @@ Create a new user with the required fields: `name`, `surname`, `email`, `phone_n
 
 ```json
 {
-  "message": "User created successfully"
+    "code": 201,
+    "message": "User created successfully"
 }
 ```
 
 ### 2. Get All Users
 
-- **GET** `/users`
+- **GET** `/user`
 
 Get a list of all users.
 
@@ -91,20 +92,32 @@ Get a list of all users.
 
 ```json
 [
+  "code": 200,
+  "message": "Users fetched successfully",
+  "data" : [
   {
-    "id": "uuid",
+    "id": "550e8400-e29b-41d4-a716-446655440002",
     "name": "John",
     "surname": "Doe",
     "email": "john.doe@example.com",
-    "phone_number": "1234567890",
+    "phone_number": "05111111111",
     "created_at": "2022-01-01T00:00:00Z"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440001",
+    "name": "Elif",
+    "surname": "Çelik",
+    "email": "elifcelik@gmail.com",
+    "phone_number": "05121121212",
+    "created_at": "2024-12-31T20:38:40Z"
   }
+  ]        
 ]
 ```
 
 ### 3. Get User by ID
 
-- **GET** `/users/{id}`
+- **GET** `/user/{id}`
 
 Get a user by their ID.
 
@@ -112,18 +125,22 @@ Get a user by their ID.
 
 ```json
 {
-  "id": "uuid",
-  "name": "John",
-  "surname": "Doe",
-  "email": "john.doe@example.com",
-  "phone_number": "1234567890",
-  "created_at": "2022-01-01T00:00:00Z"
+  "code": 200,
+  "message": "User found successfully",
+  "data" : {
+      "id": "uuid",
+      "name": "John",
+      "surname": "Doe",
+      "email": "john.doe@example.com",
+      "phone_number": "1234567890",
+      "created_at": "2022-01-01T00:00:00Z"
+  }
 }
 ```
 
 ### 4. Update User
 
-- **PATCH** `/users/{id}`
+- **PATCH** `/user/{id}`
 
 Update the user information. At least one field should be provided in the request body.
 
@@ -140,13 +157,22 @@ Update the user information. At least one field should be provided in the reques
 
 ```json
 {
-  "message": "User updated successfully"
+  "code": 200,
+  "message": "User updated successfully",
+  "data" : {
+      "id": "uuid",
+      "name": "John Updated",
+      "surname": "Doe",
+      "email": "john.updated@example.com",
+      "phone_number": "1234567890",
+      "created_at": "2022-01-01T00:00:00Z"
+  }
 }
 ```
 
 ### 5. Delete User
 
-- **DELETE** `/users/{id}`
+- **DELETE** `/user/{id}`
 
 Delete a user by their ID.
 
@@ -154,6 +180,7 @@ Delete a user by their ID.
 
 ```json
 {
+  "code": 200,
   "message": "User deleted successfully"
 }
 ```

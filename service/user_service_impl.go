@@ -35,7 +35,7 @@ func (service *UserServiceImpl) Create(ctx context.Context, request request.User
 
 	if existingUser.Email != "" {
 		fmt.Print("User with email already existsl")
-		return helper.NewErrorResponse(400, "User with this email already exists", nil)
+		return helper.NewErrorResponse(409, "User with this email already exists", nil)
 	}
 
 	existingUserByPhoneNumber, err := service.UserRepository.FindByPhoneNumber(ctx, request.PhoneNumber)
@@ -46,7 +46,7 @@ func (service *UserServiceImpl) Create(ctx context.Context, request request.User
 
 	if existingUserByPhoneNumber.PhoneNumber != "" {
 		fmt.Print("User with phone already existsl")
-		return helper.NewErrorResponse(400, "User with this phone nubmer already exists", nil)
+		return helper.NewErrorResponse(409, "User with this phone nubmer already exists", nil)
 	}
 
 	user := model.User{
@@ -144,7 +144,7 @@ func (service *UserServiceImpl) Update(ctx context.Context, request request.User
 	}
 
 	if existingUser.Email != "" {
-		return response.UserResponse{}, helper.NewErrorResponse(400, "User with email already exists", nil)
+		return response.UserResponse{}, helper.NewErrorResponse(409, "User with email already exists", nil)
 	}
 
 	existingUserByPhoneNumber, err := service.UserRepository.FindByPhoneNumber(ctx, request.PhoneNumber)
@@ -153,7 +153,7 @@ func (service *UserServiceImpl) Update(ctx context.Context, request request.User
 	}
 
 	if existingUserByPhoneNumber.PhoneNumber != "" {
-		return response.UserResponse{}, helper.NewErrorResponse(400, "User with this phone nubmer already exists", nil)
+		return response.UserResponse{}, helper.NewErrorResponse(409, "User with this phone nubmer already exists", nil)
 	}
 
 	if request.Name != "" {
